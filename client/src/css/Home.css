@@ -1,0 +1,295 @@
+/* Global Styles */
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  min-width: 320px;
+}
+
+/* Home Page Container */
+.home-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Hero Section */
+.hero-section {
+  text-align: center;
+  background: linear-gradient(to right, #007bff, #00c6ff);
+  color: white;
+  padding: 50px 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: auto;
+}
+
+.highlight {
+  font-weight: bold;
+  color: yellow;
+}
+
+/* Search Bar */
+.search-container {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 0 10px; /* Add padding to prevent search bar from touching the edges */
+  padding-top: 50px;
+}
+
+.search-container input {
+  width: 100%; /* Make search bar take full width */
+  max-width: 500px;
+  padding: 12px;
+  font-size: 1rem;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+
+.search-container input:focus {
+  border-color: #00c6ff;
+  box-shadow: 0 0 10px rgba(0, 198, 255, 0.5);
+}
+
+/* Filter Buttons */
+.filter-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 0 10px; /* Add padding to prevent buttons from touching the edges */
+}
+
+.filter-button {
+  background: #eee;
+  padding: 8px 15px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap; /* Prevent buttons from wrapping text */
+}
+
+.filter-button:hover {
+  background: #007bff;
+  color: white;
+}
+
+.filter-button.active {
+  background: #007bff;
+  color: white;
+}
+
+/* Courses Section */
+.courses-heading {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* Courses Grid */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjusted minmax */
+  gap: 20px;
+  justify-content: center;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Course Card */
+.course-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+  cursor: pointer;
+  text-align: center;
+}
+
+.course-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.course-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.course-info {
+  padding: 15px;
+}
+
+.course-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #222;
+  word-wrap: break-word; /* Added for long titles */
+  overflow-wrap: break-word;
+}
+
+.course-description {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.5;
+  word-wrap: break-word; /* Added for long descriptions */
+  overflow-wrap: break-word;
+}
+
+/* Loading & No Results */
+.loading-text,
+.no-results {
+  text-align: center;
+  font-size: 1.2rem;
+  color: gray;
+  margin-top: 20px;
+}
+
+/* Image Slider */
+.image-slider {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.course-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.prev-btn,
+.next-btn {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 50%;
+}
+
+.prev-btn {
+  left: 5px;
+}
+
+.next-btn {
+  right: 5px;
+}
+
+.prev-btn:hover,
+.next-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+
+  .hero-section p {
+    font-size: 1.1rem;
+  }
+
+  .course-title {
+    font-size: 1.2rem;
+  }
+
+  .course-description {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero-section p {
+    font-size: 1rem;
+  }
+
+  .filter-button {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+
+  .course-title {
+    font-size: 1.1rem;
+  }
+
+  .course-description {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section h1 {
+    font-size: 1.6rem;
+  }
+
+  .hero-section p {
+    font-size: 0.9rem;
+  }
+
+  .filter-button {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+  }
+
+  .course-title {
+    font-size: 1rem;
+  }
+
+  .course-description {
+    font-size: 0.85rem;
+  }
+}
+.home-hero{
+  background: linear-gradient(to right, #007bff, #00c6ff);
+  height: 300px;
+  color: white;
+  padding-top: 2px;
+}
+@media (max-width: 375px) {
+    .course-grid {
+        grid-template-columns: repeat(auto-fit,minmax(250px, 1fr));
+    }
+}
