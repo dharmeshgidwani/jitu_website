@@ -7,15 +7,7 @@ const sharp = require("sharp");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "uploads/"); 
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + path.extname(file.originalname)); 
-//   }
-// });
-
+// Use memory storage for image uploads (commented out file system storage)
 const storage = multer.memoryStorage(); 
 const upload = multer({ storage });
 
@@ -40,8 +32,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-  
-
 // ✅ GET courses (only accessible by admin)
 router.get("/admin/courses", authMiddleware, adminMiddleware, async (req, res) => {
   try {
@@ -53,43 +43,32 @@ router.get("/admin/courses", authMiddleware, adminMiddleware, async (req, res) =
 });
 
 // ✅ Add a new course
-// ✅ Add a new course
 router.post("/", upload.array("images", 5), async (req, res) => {
   try {
-    const { title, description, categories, ingredients, cookingTime } = req.body;
-    const imagePaths = [];
-
-    for (let file of req.files) {
-      const filename = `uploads/${Date.now()}-${file.originalname}`;
-      await sharp(file.buffer).resize(800).jpeg({ quality: 80 }).toFile(filename);
-      imagePaths.push(`/${filename}`);
-    }
+    const { title, description, ExtraDetails, Details, price } = req.body;
 
     const newCourse = new Course({
       title,
       description,
-      categories: Array.isArray(categories) ? categories : [categories],
-      images: imagePaths,
-      ingredients: Array.isArray(ingredients) ? ingredients : [ingredients],
-      cookingTime,
+      ExtraDetails: ExtraDetails?.trim() || "", 
+      Details,
+      price
     });
 
     await newCourse.save();
-
-    const token = generateCourseToken(newCourse._id);
-    console.log("Generated Token:", token);
-
-    res.status(201).json({ course: newCourse, token });
+    res.status(201).json(newCourse);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error adding course" });
   }
 });
 
-// ✅ Update a course 
+
+
+// ✅ Update a course (Removed categories)
 router.put("/:id", authMiddleware, adminMiddleware, upload.array("images", 5), async (req, res) => {
   try {
-    const { title, description, categories, ingredients, cookingTime } = req.body;
+    const { title, description, ExtraDetails, Details, price } = req.body;
 
     // Find the existing course
     const existingCourse = await Course.findById(req.params.id);
@@ -97,28 +76,22 @@ router.put("/:id", authMiddleware, adminMiddleware, upload.array("images", 5), a
       return res.status(404).json({ message: "Course not found" });
     }
 
-    // If no new images are uploaded, use the existing images
-    let imagePaths = existingCourse.images;
-
-    if (req.files.length > 0) {
-      // If new images are uploaded, process them
-      imagePaths = [];
-      for (let file of req.files) {
-        const filename = `uploads/${Date.now()}-${file.originalname}`;
-        await sharp(file.buffer).resize(800).jpeg({ quality: 80 }).toFile(filename);
-        imagePaths.push(`/${filename}`);
-      }
-    }
-
-    // Update the course with the new data
+    // Update the course with new data
     const updatedCourse = await Course.findByIdAndUpdate(
       req.params.id,
-      { title, description, categories, ingredients, cookingTime, images: imagePaths },
+      { 
+        title, 
+        description, 
+        ExtraDetails: ExtraDetails?.trim() || "",
+        Details, 
+        price 
+      },
       { new: true }
     );
 
     res.status(200).json({ message: "Course updated", course: updatedCourse });
   } catch (error) {
+    console.error("Error updating course:", error);
     res.status(500).json({ message: "Error updating course" });
   }
 });
@@ -156,7 +129,5 @@ router.get("/:token", async (req, res) => {
     res.status(500).json({ message: "Error fetching course details" });
   }
 });
-
-
 
 module.exports = router;

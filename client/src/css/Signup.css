@@ -1,0 +1,136 @@
+/* Signup Page Background */
+.signup-container {
+    background: linear-gradient(135deg, #f2eee6, #d3cfc5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 20px;
+    animation: fadeIn 1.2s ease-in-out;
+  }
+  
+  /* Signup Box with Glassmorphism */
+  .signup-box {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 35px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 31, 60, 0.3);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* Ensures all elements inside are centered */
+    justify-content: center;
+  }
+  
+  /* Heading */
+  .signup-box h2 {
+    color: #001f3c;
+    margin-bottom: 15px;
+    font-size: 2rem;
+    font-weight: bold;
+    animation: slideIn 0.6s ease-in-out;
+  }
+  
+  /* Input Fields */
+  .signup-box input {
+    width: 90%;  /* Adjusted width for better alignment */
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 1rem;
+    border: 2px solid #001f3c;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+    background: rgba(255, 255, 255, 0.7);
+    text-align: center; /* Centers the text inside the input fields */
+  }
+  
+  .signup-box input:focus {
+    border-color: #ffcc00;
+    box-shadow: 0 0 8px rgba(255, 204, 0, 0.6);
+    transform: scale(1.02);
+  }
+  
+  /* Buttons */
+  .signup-box button {
+    width: 90%;  /* Ensures buttons align properly with inputs */
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* Signup Button */
+  .signup-btn {
+    background: #001f3c;
+    color: white;
+    margin-top: 15px;
+  }
+  
+  .signup-btn:hover {
+    background: #003366;
+    transform: scale(1.05);
+  }
+  
+  /* OTP Button */
+  .otp-btn {
+    background: #ffcc00;
+    color: black;
+    margin-top: 10px;
+  }
+  
+  .otp-btn:hover {
+    background: #e6b800;
+    transform: scale(1.05);
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .signup-box {
+      width: 95%;
+      padding: 25px;
+    }
+  
+    .signup-box h2 {
+      font-size: 1.6rem;
+    }
+  
+    .signup-box input {
+      font-size: 0.95rem;
+    }
+  
+    .signup-box button {
+      font-size: 1rem;
+    }
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
