@@ -146,3 +146,31 @@
     transform: translateX(0);
   }
 }
+/* Logout Button */
+.nav-logout {
+  background: #d9534f; /* Red Logout Button */
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.nav-logout:hover {
+  background: #c9302c;
+}
+
+/* Keep login button as it is */
+.nav-login {
+  background: #bf9f22;
+  padding: 8px 15px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.nav-login:hover {
+  background: #218838;
+}
+

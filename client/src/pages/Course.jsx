@@ -9,6 +9,8 @@ const Course = () => {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedDate, setSelectedDate] = useState(""); // State for course joining date
+  const [bookingStatus, setBookingStatus] = useState(""); // Success/Error message
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -25,6 +27,36 @@ const Course = () => {
 
     fetchCourse();
   }, [token]);
+
+  const handleBooking = async () => {
+    if (!selectedDate) {
+      setBookingStatus("⚠️ Please select a start date before booking.");
+      return;
+    }
+  
+    const user = JSON.parse(localStorage.getItem("user")); 
+    if (!user) {
+      setBookingStatus("⚠️ User details not found. Please log in again.");
+      return;
+    }
+  
+    try {
+      const bookingDetails = {
+        courseId: course._id,
+        courseTitle: course.title,
+        joiningDate: selectedDate,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+      };
+  
+      await axios.post("http://localhost:5001/api/courses/book-course", bookingDetails);
+      setBookingStatus("✅ Booking request sent successfully!");
+    } catch (error) {
+      setBookingStatus("❌ Failed to book the course. Please try again.");
+    }
+  };
+  
 
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
@@ -57,7 +89,6 @@ const Course = () => {
         </ul>
       </div>
 
-
       {/* Topics Covered */}
       <div className="course-section">
         <h2>📖 Topics Covered</h2>
@@ -69,7 +100,6 @@ const Course = () => {
           <span>🗣 Communication Skills</span>
           <span>🧠 Psychiatry</span>
           <span>🏥 Common Disease Management</span>
-
         </div>
       </div>
 
@@ -87,11 +117,19 @@ const Course = () => {
         <p><strong>💰 Course Fee:</strong> £{course.price}</p>
         <p>{course.Details}</p>
       </div>
+
       {/* Booking Section */}
       <div className="booking-section">
-        <h2>🎯 Batch Dates 2022</h2>
-        <p><strong>IOTA3:</strong> 17th December - 24th December 2022 (Only Online, 8 Days)</p>
-        <button className="book-now-btn">BOOK NOW</button>
+        <h2>🎯 Select Your Course Joining Date</h2>
+        <input 
+          type="date" 
+          value={selectedDate} 
+          onChange={(e) => setSelectedDate(e.target.value)} 
+          className="date-picker"
+        />
+        <button className="book-now-btn" onClick={handleBooking}>BOOK NOW</button>
+
+        {bookingStatus && <p className="booking-status">{bookingStatus}</p>}
       </div>
     </div>
   );

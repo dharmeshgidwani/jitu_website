@@ -1,11 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../css/Signup.css"; 
+import "../css/Signup.css";
 
 const Signup = () => {
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });
   const [otp, setOtp] = useState("");
   const [showOtpField, setShowOtpField] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -13,17 +15,26 @@ const Signup = () => {
     try {
       await axios.post("http://localhost:5001/api/auth/signup", form);
       setShowOtpField(true);
+      alert("OTP sent to your email. Please enter OTP to verify.");
     } catch (error) {
-      alert(error.response.data.message);
+      alert(error.response?.data?.message || "Signup failed");
     }
   };
 
   const handleVerifyOTP = async () => {
     try {
-      await axios.post("http://localhost:5001/api/auth/verify-otp", { email: form.email, otp });
-      alert("Email Verified! Please login.");
+      const res = await axios.post("http://localhost:5001/api/auth/verify-otp", { email: form.email, otp });
+
+      const user = res.data.user;
+
+      // Save token & full user details in localStorage
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      alert("Signup Successful! You are now logged in.");
+      navigate("/");
     } catch (error) {
-      alert(error.response.data.message);
+      alert(error.response?.data?.message || "OTP verification failed");
     }
   };
 
@@ -40,7 +51,7 @@ const Signup = () => {
         {showOtpField && (
           <>
             <input type="text" placeholder="Enter OTP" onChange={(e) => setOtp(e.target.value)} />
-            <button className="otp-btn" onClick={handleVerifyOTP}>Verify OTP</button>
+            <button className="verify-btn" onClick={handleVerifyOTP}>Verify OTP</button>
           </>
         )}
       </div>

@@ -16,9 +16,20 @@ import Navbar from "./components/Navbar";
 ;
 
 const isAdmin = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  return user && user.role === "admin";
+  const userData = localStorage.getItem("user");
+  
+  if (!userData || userData === "undefined") return false; 
+
+  try {
+    const user = JSON.parse(userData);
+    return user && user.role === "admin";
+  } catch (error) {
+    console.error("Error parsing user data:", error);
+    return false;
+  }
 };
+
+
 
 function App() {
   return (

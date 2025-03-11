@@ -1,11 +1,14 @@
 const express = require("express");
-const { authMiddleware, adminMiddleware } = require("../middlewares/authMiddleware");
+const { authMiddleware } = require("../middlewares/authMiddleware");
+const { adminMiddleware } = require("../middlewares/adminMiddleware");
 const multer = require("multer");
 const Course = require("../models/Course");
 const path = require("path");
 const sharp = require("sharp");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const sendEmail = require("../utils/sendEmail");
+const Booking = require("../models/Booking")
 
 // Use memory storage for image uploads (commented out file system storage)
 const storage = multer.memoryStorage(); 
@@ -129,5 +132,61 @@ router.get("/:token", async (req, res) => {
     res.status(500).json({ message: "Error fetching course details" });
   }
 });
+
+router.post("/book-course", async (req, res) => {
+  try {
+    const { courseId, courseTitle, joiningDate, name, email, phone } = req.body;
+
+    const newBooking = new Booking({
+      courseId,
+      courseTitle,
+      joiningDate,
+      name,
+      email,
+      phone,
+    });
+
+    await newBooking.save(); 
+
+    const subject = `New Course Booking Request: ${courseTitle}`;
+    const text = `
+      📢 New Booking Request!
+      -----------------------------------
+      📚 Course: ${courseTitle}
+      📅 Joining Date: ${joiningDate}
+      
+      👤 User Details:
+      🔹 Name: ${name}
+      📧 Email: ${email}
+      📞 Phone: ${phone}
+      
+      ✅ Please confirm the booking.
+    `;
+
+    // Send email to admin
+    await sendEmail(process.env.EMAIL_USER, subject, text);
+
+    res.status(200).json({ message: "Booking request saved and sent to admin" });
+  } catch (error) {
+    console.error("Error processing booking:", error);
+    res.status(500).json({ message: "Error processing booking request" });
+  }
+});
+router.get("/bookings", authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    console.log("🔵 Admin Authenticated:", req.user);
+
+    const bookings = await Booking.find().sort({ createdAt: -1 });
+
+    console.log("📋 Found Bookings:", bookings);
+
+    res.status(200).json(bookings);
+  } catch (error) {
+    console.error("❌ Error fetching bookings:", error);
+    res.status(500).json({ message: "Error fetching bookings" });
+  }
+});
+
+
 
 module.exports = router;

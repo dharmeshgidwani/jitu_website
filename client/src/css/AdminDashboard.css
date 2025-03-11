@@ -273,3 +273,26 @@ body {
     font-size: 0.9rem;
   }
 }
+.booking-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.booking-card {
+  background: #f2eee6;
+  border: 1px solid #001f3c;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+}
+
+.booking-card h3 {
+  color: #001f3c;
+}
+
+.booking-card p {
+  margin: 5px 0;
+}

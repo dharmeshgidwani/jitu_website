@@ -40,25 +40,43 @@ router.post("/signup", async (req, res) => {
 
 
 // Verify OTP Route
+// Verify OTP Route (Fixed)
 router.post("/verify-otp", async (req, res) => {
   const { email, otp } = req.body;
 
   try {
     const user = await User.findOne({ email });
-    if (!user || user.otp !== otp || user.otpExpires < Date.now()) {
+    if (!user) return res.status(400).json({ message: "User not found" });
+
+    // Trim whitespace and compare OTP correctly
+    if (user.otp !== otp.trim() || user.otpExpires < Date.now()) {
       return res.status(400).json({ message: "Invalid or expired OTP" });
     }
 
+    // Mark user as verified and clear OTP fields
     user.verified = true;
     user.otp = null;
     user.otpExpires = null;
     await user.save();
 
-    res.status(200).json({ message: "Email verified successfully" });
+    // Generate JWT token
+    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    res.status(200).json({ 
+      message: "Email verified successfully",
+      token,
+      user: {
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
 });
+
 
 // Login Route
 router.post("/login", async (req, res) => {
@@ -73,7 +91,7 @@ router.post("/login", async (req, res) => {
 
     const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.status(200).json({ token, user: { name: user.name, email: user.email, role: user.role } });
+    res.status(200).json({ token, user: { name: user.name, email: user.email, phone: user.phone, role: user.role } });
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }

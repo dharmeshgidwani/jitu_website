@@ -11,9 +11,11 @@ const AdminDashboard = () => {
   const [price, setPrice] = useState(""); 
   const [editingCourse, setEditingCourse] = useState(null);
   const [view, setView] = useState("add");
+  const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
     fetchCourses();
+    fetchBookings();
   }, []);
 
   const fetchCourses = async () => {
@@ -24,6 +26,29 @@ const AdminDashboard = () => {
       console.error("Error fetching courses:", error);
     }
   };
+
+  const fetchBookings = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Unauthorized! Please log in again.");
+        return;
+      }
+  
+      console.log("📌 Token being sent:", token); 
+  
+      const response = await axios.get("http://localhost:5001/api/courses/bookings", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      console.log("✅ Bookings fetched:", response.data);
+      setBookings(response.data);
+    } catch (error) {
+      console.error("❌ Error fetching bookings:", error);
+    }
+  };
+  
+
 
   const handleAddOrUpdateCourse = async (e) => {
     e.preventDefault();
@@ -124,6 +149,7 @@ const AdminDashboard = () => {
         <button onClick={() => setView("add")} className="add-btn">Add Course</button>
         <button onClick={() => setView("edit")} className="edit-btn">Edit Course</button>
         <button onClick={() => setView("delete")} className="delete-btn">Delete Course</button>
+        <button onClick={() => setView("bookings")} className="booking-btn">Booking Requests</button>
       </div>
 
       {/* Add/Edit Course Form */}
@@ -204,7 +230,31 @@ const AdminDashboard = () => {
           </div>
         </div>
       )}
+       {/* Booking Requests Section */}
+       {view === "bookings" && (
+        <div>
+          <h2>Booking Requests</h2>
+          {bookings.length === 0 ? (
+            <p>No booking requests found.</p>
+          ) : (
+            <div className="booking-list">
+              {bookings.map((booking) => (
+                <div key={booking._id} className="booking-card">
+                  <h3>{booking.courseTitle}</h3>
+                  <p><strong>Joining Date:</strong> {booking.joiningDate}</p>
+                  <p><strong>Name:</strong> {booking.name}</p>
+                  <p><strong>Email:</strong> {booking.email}</p>
+                  <p><strong>Phone:</strong> {booking.phone}</p>
+                  <p><strong>Requested On:</strong> {new Date(booking.createdAt).toLocaleString()}</p>
+                  <button className="delete-btn" onClick={() => handleDeleteBooking(booking._id)}>Delete</button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
+    
   );
 };
 

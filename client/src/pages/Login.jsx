@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import "../css/Login.css"; // Import the CSS file
 
@@ -34,6 +35,11 @@ const Login = () => {
         <input type="email" name="email" placeholder="Email" onChange={handleChange} />
         <input type="password" name="password" placeholder="Password" onChange={handleChange} />
         <button className="login-btn" onClick={handleLogin}>Login</button>
+
+        {/* Signup Redirect */}
+        <p className="signup-text">
+          New user? <Link to="/signup">Sign up</Link>
+        </p>
       </div>
     </div>
   );

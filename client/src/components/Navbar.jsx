@@ -1,46 +1,70 @@
-import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "../css/Navbar.css"; // Import your CSS
+import { Link, useLocation } from "react-router-dom";
+import "../css/Navbar.css";
 
 const Navbar = () => {
   const location = useLocation();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token")); // Initialize based on token
 
-  // Check if user is logged in when component mounts
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token); // Convert token existence to boolean
-  }, [location.pathname]); // Update when the route changes
+    const handleStorageChange = () => {
+      setIsLoggedIn(!!localStorage.getItem("token")); // Update login state when token changes
+    };
 
-  // Logout function
+    // Listen for storage changes (login/logout/signup)
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setIsLoggedIn(false);
-    window.location.href = "/"; // Redirect to home
+    window.dispatchEvent(new Event("storage")); // Notify other components
   };
 
-  // Hide Navbar on Admin Dashboard
   if (location.pathname.includes("/admin")) return null;
 
   return (
-    <nav className="navbar">
-      <div className="nav-container">
-        <Link to="/" className="nav-logo">Plab 2 MOCKS by Dr. G</Link>
-        <ul className="nav-links">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/contact">Contact</Link></li>
+    <>
+      {/* Navbar */}
+      <nav className="navbar">
+        <div className="nav-container">
+          <Link to="/" className="nav-logo">
+            <img src="/jitu-logo.JPG" alt="Logo" className="nav-logo-img" />
+            <span className="nav-title">Plab 2 MOCKS by Dr. G</span>
+          </Link>
 
-          {/* Conditionally Render Login/Logout Button */}
-          {isLoggedIn ? (
-            <button className="nav-logout" onClick={handleLogout}>Logout</button>
-          ) : (
-            <Link to="/login" className="nav-login">Login</Link>
-          )}
-        </ul>
-      </div>
-    </nav>
+          {/* Navigation Links */}
+          <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
+            <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
+            <li><Link to="/about" onClick={() => setMenuOpen(false)}>About</Link></li>
+            <li><Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link></li>
+
+            {/* Conditional Rendering for Login/Logout */}
+            {isLoggedIn ? (
+              <li><button className="nav-logout" onClick={handleLogout}>Logout</button></li>
+            ) : (
+              <li><Link to="/login" className="nav-login" onClick={() => setMenuOpen(false)}>Login</Link></li>
+            )}
+          </ul>
+
+          {/* Mobile Menu Icon */}
+          <div className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+            <div className="bar"></div>
+            <div className="bar"></div>
+            <div className="bar"></div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Empty div to prevent content shift */}
+      <div className="navbar-space"></div>
+    </>
   );
 };
 
