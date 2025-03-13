@@ -8,7 +8,9 @@ const userSchema = new mongoose.Schema({
   otp: String,
   otpExpires: Date,
   verified: { type: Boolean, default: false },
-  role: { type: String, default: "user" }, // Admin or User
+  role: { type: String, default: "user" }, 
+  examMonth: { type: String, required: false }, 
+
 });
 
 module.exports = mongoose.model("User", userSchema);

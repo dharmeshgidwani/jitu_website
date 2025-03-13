@@ -3,24 +3,33 @@ const User = require("../models/User");
 
 const authMiddleware = async (req, res, next) => {
   try {
-    console.log("🟡 Headers received:", req.headers);
+    console.log("🟡 Headers received on backend:", req.headers);
 
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      console.log("❌ Invalid Authorization Header:", authHeader);
+    const authHeader = req.headers["authorization"];
+    console.log("📌 Received Auth Header:", authHeader);
+
+    // If no token is provided, proceed as a guest
+    if (!authHeader) {
+      console.log("👤 No token provided, proceeding as guest");
+      return next(); // Allow request to proceed without a user
+    }
+
+    if (!authHeader.startsWith("Bearer ")) {
+      console.log("❌ Invalid Authorization Header format:", authHeader);
       return res.status(401).json({ message: "Unauthorized: Invalid token format" });
     }
 
-    const token = authHeader.split(" ")[1]; // Extract token after "Bearer "
-    console.log("🔑 Token received:", token);
+    const token = authHeader.split(" ")[1]; 
+    console.log("🔹 Extracted Token:", token);
 
-    if (!token) {
-      console.log("❌ No token found after 'Bearer'");
-      return res.status(401).json({ message: "Unauthorized: No token provided" });
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log("✅ Decoded token:", decoded);
+    } catch (err) {
+      console.log("❌ JWT Verification Failed:", err);
+      return res.status(401).json({ message: "Unauthorized: Invalid token" });
     }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("✅ Decoded token:", decoded);
 
     const user = await User.findById(decoded.userId).select("-password");
     console.log("👤 User found:", user);
@@ -30,7 +39,7 @@ const authMiddleware = async (req, res, next) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    req.user = user;
+    req.user = user; // ✅ Attach user to request
     next();
   } catch (error) {
     console.error("❌ Auth Middleware Error:", error);

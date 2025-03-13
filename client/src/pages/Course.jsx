@@ -1,45 +1,63 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import "../css/Course.css"; // Ensure CSS is updated accordingly
-//import placeholderImage from "../assets/course-placeholder.jpg"; // Add an image in the assets folder
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../css/Course.css";
 
 const Course = () => {
-  const { token } = useParams(); 
+  const { courseId } = useParams();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [selectedDate, setSelectedDate] = useState(""); // State for course joining date
-  const [bookingStatus, setBookingStatus] = useState(""); // Success/Error message
+  const [selectedDate, setSelectedDate] = useState("");
 
   useEffect(() => {
+    if (!courseId) {
+      console.error("🚨 courseId is missing in useParams!");
+      setError("Invalid Course ID.");
+      setLoading(false);
+      return;
+    }
+
     const fetchCourse = async () => {
       try {
-        const response = await axios.get(`http://localhost:5001/api/courses/${token}`);
-        console.log(response.data);
-        setCourse(response.data);
+        const { data } = await axios.get(
+          `http://localhost:5001/api/courses/fetch/${courseId}`
+        );
+        setCourse(data);
       } catch (error) {
-        setError("Failed to fetch course details");
+        console.error(
+          "Error fetching course details:",
+          error.response?.data || error.message
+        );
+        setError("Failed to fetch course details.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchCourse();
-  }, [token]);
+  }, [courseId]);
 
   const handleBooking = async () => {
     if (!selectedDate) {
-      setBookingStatus("⚠️ Please select a start date before booking.");
+      toast.warn("⚠️ Please select a start date before booking.", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       return;
     }
-  
-    const user = JSON.parse(localStorage.getItem("user")); 
+
+    const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
-      setBookingStatus("⚠️ User details not found. Please log in again.");
+      toast.error("🚨 User details not found. Please log in again.", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       return;
     }
-  
+
     try {
       const bookingDetails = {
         courseId: course._id,
@@ -49,35 +67,42 @@ const Course = () => {
         email: user.email,
         phone: user.phone,
       };
-  
-      await axios.post("http://localhost:5001/api/courses/book-course", bookingDetails);
-      setBookingStatus("✅ Booking request sent successfully!");
+
+      await axios.post(
+        "http://localhost:5001/api/courses/book-course",
+        bookingDetails
+      );
+      toast.success("✅ Booking request sent successfully!", {
+        position: "top-center",
+        autoClose: 3000,
+      });
     } catch (error) {
-      setBookingStatus("❌ Failed to book the course. Please try again.");
+      toast.error("❌ Failed to book the course. Please try again.", {
+        position: "top-center",
+        autoClose: 3000,
+      });
     }
   };
-  
 
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="course-container">
+      <ToastContainer /> {/* ✅ Toast notifications container */}
       {/* Course Header Section */}
       <div className="course-header">
         <div className="course-info">
           <h1 className="course-title">{course.title}</h1>
           <p className="course-meta">
-            <span>📖 Created by <strong>Dr. G</strong></span>
+            <span>
+              📖 Created by <strong>Dr. G</strong>
+            </span>
             <span>{course.description}</span>
           </p>
           <p className="course-rating">⭐ 4.7 (4,699 ratings) | ★★★★★ 5/5</p>
         </div>
-        {/* <div className="course-image">
-          <img src={placeholderImage} alt="Course" />
-        </div> */}
       </div>
-
       {/* Course Overview */}
       <div className="course-section">
         <h2>📌 Course Highlights</h2>
@@ -88,7 +113,6 @@ const Course = () => {
           <li>✔ Dedicated WhatsApp group for discussion</li>
         </ul>
       </div>
-
       {/* Topics Covered */}
       <div className="course-section">
         <h2>📖 Topics Covered</h2>
@@ -102,7 +126,6 @@ const Course = () => {
           <span>🏥 Common Disease Management</span>
         </div>
       </div>
-
       {/* Extra Details */}
       {course.ExtraDetails && (
         <div className="extra-details">
@@ -110,26 +133,26 @@ const Course = () => {
           <p>{course.ExtraDetails}</p>
         </div>
       )}
-
-      {/* Course Details Section */}
-      <div className="course-details">
-        <h2>📚 Course Includes:</h2>
-        <p><strong>💰 Course Fee:</strong> £{course.price}</p>
-        <p>{course.Details}</p>
+      {/* ✅ Price Section with Discount */}
+      <div className="course-price">
+        <span className="original-price">
+          Original Price:{" "}
+          <span className="strike">£ {Number(course.price) + 250}</span>
+        </span>
+        <span className="current-price">Now Only: £ {course.price}</span>
       </div>
-
       {/* Booking Section */}
       <div className="booking-section">
         <h2>🎯 Select Your Course Joining Date</h2>
-        <input 
-          type="date" 
-          value={selectedDate} 
-          onChange={(e) => setSelectedDate(e.target.value)} 
+        <input
+          type="date"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
           className="date-picker"
         />
-        <button className="book-now-btn" onClick={handleBooking}>BOOK NOW</button>
-
-        {bookingStatus && <p className="booking-status">{bookingStatus}</p>}
+        <button className="book-now-btn" onClick={handleBooking}>
+          BOOK NOW
+        </button>
       </div>
     </div>
   );

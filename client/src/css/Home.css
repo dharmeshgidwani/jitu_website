@@ -291,3 +291,27 @@ body {
     font-size: 0.9rem;
   }
 }
+/* ✅ Course Card Price Section */
+.course-price-section {
+  background: #fff5e6; /* Light background for visibility */
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* ✅ Increased Price */
+.increased-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #001f3c; /* Deep navy for contrast */
+}
+
+
+.discount-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: red; /* Bold red to grab attention */
+  margin-top: 5px;
+  text-transform: uppercase;
+}

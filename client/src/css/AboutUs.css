@@ -1,0 +1,95 @@
+/* ✅ About Us Page Styles */
+.about-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #f2eee6; /* Light Cream (Your Theme) */
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 31, 60, 0.2);
+    text-align: center;
+    animation: fadeIn 0.8s ease-in-out;
+  }
+  
+  /* ✅ Title */
+  .about-container h1 {
+    font-size: 2.5rem;
+    color: #001f3c; /* Deep Navy */
+    font-weight: bold;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  
+  /* ✅ Underline effect */
+  .about-container h1::after {
+    content: "";
+    width: 80px;
+    height: 4px;
+    background: #001f3c;
+    display: block;
+    margin: 10px auto 0;
+    border-radius: 2px;
+  }
+  
+  /* ✅ Paragraph Styling */
+  .about-container p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #333;
+    text-align: justify;
+    margin-top: 15px;
+  }
+  
+  /* ✅ Highlights */
+  .about-container p strong {
+    color: #001f3c;
+  }
+  
+  /* ✅ Bullet Points */
+  .about-list {
+    text-align: left;
+    margin-top: 20px;
+    padding: 0;
+  }
+  
+  .about-list li {
+    font-size: 1.1rem;
+    color: #001f3c;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .about-list li::before {
+    content: "✅";
+    color: green;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  /* ✅ Fade In Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* ✅ Responsive Design */
+  @media (max-width: 768px) {
+    .about-container {
+      padding: 15px;
+    }
+  
+    .about-container h1 {
+      font-size: 2rem;
+    }
+  
+    .about-container p {
+      font-size: 1.1rem;
+    }
+  }
+  

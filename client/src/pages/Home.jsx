@@ -12,10 +12,20 @@ const Home = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5001/api/courses");
+        const token = localStorage.getItem("token");
+        console.log("📌 Retrieved Token:", token);
+
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+        const { data } = await axios.get("http://localhost:5001/api/courses", {
+          headers,
+        });
+
+        console.log("✅ Course data received:", data);
         setCourses(data);
       } catch (error) {
-        console.error("Error fetching courses:", error);
+        console.error("❌ Error fetching courses:", error.response);
+        alert(error.response?.data?.message || "Failed to fetch courses");
       } finally {
         setLoading(false);
       }
@@ -128,16 +138,25 @@ const HeroSection = () => (
 );
 
 /* ✅ Define `CourseCard` Component */
-const CourseCard = ({ course }) => (
-  <Link to={`/${course.token}`} className="course-card-link">
-    <div className="course-card">
-      <div className="course-info">
-        <h3 className="course-title">{course.title}</h3>
-        <p className="course-description">{course.description}</p>
-        <p className="course-price">Price: ₹{course.price}</p>
+const CourseCard = ({ course }) => {
+  const increasedPrice = Number(course.price) + 250; // Ensure proper addition
+
+  return (
+    <Link to={`/course/${course._id}`} className="course-card-link">
+      <div className="course-card">
+        <div className="course-info">
+          <h3 className="course-title">{course.title}</h3>
+          <p className="course-description">{course.description}</p>
+
+          {/* ✅ Updated Price Section (Only Increased Price) */}
+          <div className="course-price-section">
+            <p className="increased-price">Price: £ {increasedPrice}</p>
+            <p className="discount-text">DISCOUNT AVAILABLE</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </Link>
-);
+    </Link>
+  );
+};
 
 export default Home;

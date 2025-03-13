@@ -110,7 +110,187 @@
       font-size: 1rem;
     }
   }
-  
+  /* Modal Background */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Modal Box */
+.modal {
+  background: white;
+  width: 90%;
+  max-width: 400px;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: slideIn 0.3s ease-in-out;
+}
+
+/* Modal Header */
+.modal h2 {
+  margin-bottom: 15px;
+  font-size: 22px;
+  color: #001f3c; /* Deep navy */
+}
+
+/* Input Field */
+.modal input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.modal input:focus {
+  border-color: #001f3c;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 31, 60, 0.3);
+}
+
+/* Buttons */
+.verify-btn, .close-btn {
+  margin-top: 15px;
+  padding: 12px 20px;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 6px;
+  width: 100%;
+  transition: all 0.3s ease-in-out;
+}
+
+.verify-btn {
+  background-color: #001f3c; /* Your deep navy */
+  color: white;
+}
+
+.verify-btn:hover {
+  background-color: #003366;
+}
+
+.close-btn {
+  background-color: red;
+  color: white;
+}
+
+.close-btn:hover {
+  background-color: darkred;
+}
+
+/* Close Button (X) in top right */
+.close-icon {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+}
+
+.close-icon:hover {
+  color: black;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .modal {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .modal h2 {
+    font-size: 20px;
+  }
+
+  .modal input {
+    font-size: 14px;
+  }
+
+  .verify-btn, .close-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+/* ✅ Exam Month Dropdown Styling */
+.signup-box select {
+  width: 95%; /* Matches input fields */
+  padding: 12px;
+  margin: 10px 0;
+  font-size: 1rem;
+  border: 2px solid #001f3c; /* Deep Navy */
+  border-radius: 8px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.7); /* Matches input fields */
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  text-align: center; /* Centers text inside dropdown */
+}
+
+/* ✅ Hover & Focus Effect */
+.signup-box select:hover,
+.signup-box select:focus {
+  border-color: #ffcc00;
+  box-shadow: 0 0 8px rgba(255, 204, 0, 0.6);
+  transform: scale(1.02);
+}
+
+/* ✅ Dropdown Arrow Customization */
+.signup-box select::-ms-expand {
+  display: none; /* Removes default arrow in IE */
+}
+
+.signup-box select {
+  appearance: none; /* Hides default dropdown arrow */
+  background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23001f3c' d='M2 0L0 2h4z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  padding-right: 30px; /* Space for custom arrow */
+}
+
+/* ✅ Responsive Adjustments */
+@media (max-width: 768px) {
+  .signup-box select {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-box select {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+}
+
+
   /* Animations */
   @keyframes fadeIn {
     from {
