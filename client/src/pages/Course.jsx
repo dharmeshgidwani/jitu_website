@@ -48,7 +48,7 @@ const Course = () => {
       });
       return;
     }
-
+  
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
       toast.error("🚨 User details not found. Please log in again.", {
@@ -57,7 +57,13 @@ const Course = () => {
       });
       return;
     }
-
+  
+    // ✅ Show "Please wait..." before making the API call
+    const loadingToast = toast.info("⏳ Please wait... Booking in progress.", {
+      position: "top-center",
+      autoClose: false, // Keep it open until API response
+    });
+  
     try {
       const bookingDetails = {
         courseId: course._id,
@@ -67,22 +73,30 @@ const Course = () => {
         email: user.email,
         phone: user.phone,
       };
-
+  
       await axios.post(
         "https://jituwebsite.up.railway.app/api/courses/book-course",
         bookingDetails
       );
+  
+      // ✅ Remove the loading toast before showing success
+      toast.dismiss(loadingToast);
+  
       toast.success("✅ Booking request sent successfully!", {
         position: "top-center",
         autoClose: 3000,
       });
     } catch (error) {
+      // ✅ Remove the loading toast before showing error
+      toast.dismiss(loadingToast);
+  
       toast.error("❌ Failed to book the course. Please try again.", {
         position: "top-center",
         autoClose: 3000,
       });
     }
   };
+  
 
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
