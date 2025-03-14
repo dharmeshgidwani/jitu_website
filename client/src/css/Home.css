@@ -38,7 +38,6 @@ body {
 }
 
 /* Typing Effect */
-/* Typing Effect */
 .typing-effect {
   font-size: clamp(1.5rem, 5vw, 3rem);
   font-weight: bold;
@@ -48,8 +47,9 @@ body {
   overflow: hidden;
   border-right: 4px solid white;
   display: inline-block;
-  white-space: nowrap; /* Ensure the text stays in one line */
-  width: 0; /* Start with no width */
+  white-space: nowrap;
+  width: 0;
+  max-width: 100%; /* Ensure it doesn't overflow */
   animation: typing 3.5s steps(30, end) forwards, blink 0.7s infinite;
 }
 
@@ -59,9 +59,17 @@ body {
     width: 0;
   }
   to {
-    width: fit-content; /* Expand to fit the text exactly */
+    width: 100%; /* Expand within container */
   }
 }
+
+/* Cursor Blinking */
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
 
 
 
