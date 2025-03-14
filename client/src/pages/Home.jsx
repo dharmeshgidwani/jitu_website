@@ -17,7 +17,7 @@ const Home = () => {
 
         const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-        const { data } = await axios.get("http://localhost:5001/api/courses", {
+        const { data } = await axios.get("https://jituwebsite.up.railway.app/api/courses", {
           headers,
         });
 

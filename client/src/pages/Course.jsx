@@ -23,7 +23,7 @@ const Course = () => {
     const fetchCourse = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:5001/api/courses/fetch/${courseId}`
+          `https://jituwebsite.up.railway.app/api/courses/fetch/${courseId}`
         );
         setCourse(data);
       } catch (error) {
@@ -69,7 +69,7 @@ const Course = () => {
       };
 
       await axios.post(
-        "http://localhost:5001/api/courses/book-course",
+        "https://jituwebsite.up.railway.app/api/courses/book-course",
         bookingDetails
       );
       toast.success("✅ Booking request sent successfully!", {
@@ -129,7 +129,7 @@ const Course = () => {
       {/* Extra Details */}
       {course.ExtraDetails && (
         <div className="extra-details">
-          <h2>🔍 Additional Information</h2>
+          <h2> Additional Information</h2>
           <p>{course.ExtraDetails}</p>
         </div>
       )}

@@ -20,7 +20,6 @@ const Signup = () => {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  // ✅ Signup function
 // ✅ Signup function with validation
 const handleSignup = async () => {
   // Trim input values and validate
@@ -35,7 +34,7 @@ const handleSignup = async () => {
   }
 
   try {
-    await axios.post("http://localhost:5001/api/auth/signup", form);
+    await axios.post("https://jituwebsite.up.railway.app/api/auth/signup", form);
     
     toast.success("✅ OTP sent to your email. Please enter OTP to verify.", {
       position: "top-center",
@@ -55,7 +54,7 @@ const handleSignup = async () => {
   // ✅ Verify OTP function
   const handleVerifyOTP = async () => {
     try {
-      const res = await axios.post("http://localhost:5001/api/auth/verify-otp", { 
+      const res = await axios.post("https://jituwebsite.up.railway.app/api/auth/verify-otp", { 
         email: form.email, 
         otp: otp.trim() // Ensure trimmed OTP 
       });

@@ -32,7 +32,7 @@ const AdminDashboard = () => {
         return;
       }
   
-      const response = await axios.get("http://localhost:5001/api/courses/admin/courses", {
+      const response = await axios.get("https://jituwebsite.up.railway.app/api/courses/admin/courses", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -60,7 +60,7 @@ const AdminDashboard = () => {
 
       console.log("🔵 Fetching bookings...");
       const { data } = await axios.get(
-        "http://localhost:5001/api/courses/bookings",
+        "https://jituwebsite.up.railway.app/api/courses/bookings",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -122,14 +122,14 @@ const AdminDashboard = () => {
     try {
       if (editingCourse) {
         await axios.put(
-          `http://localhost:5001/api/courses/${editingCourse._id}`,
+          `https://jituwebsite.up.railway.app/api/courses/${editingCourse._id}`,
           courseData,
           config
         );
         alert("Course updated successfully");
       } else {
         await axios.post(
-          "http://localhost:5001/api/courses",
+          "https://jituwebsite.up.railway.app/api/courses",
           courseData,
           config
         );
@@ -160,7 +160,7 @@ const AdminDashboard = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5001/api/courses/bookings/${bookingId}/complete`,
+        `https://jituwebsite.up.railway.app/api/courses/bookings/${bookingId}/complete`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -181,7 +181,7 @@ const AdminDashboard = () => {
   const handleMarkAsIncomplete = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:5001/api/courses/bookings/mark-as-incomplete/${id}`,
+        `https://jituwebsite.up.railway.app/api/courses/bookings/mark-as-incomplete/${id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -205,7 +205,7 @@ const AdminDashboard = () => {
       }
 
       await axios.delete(
-        `http://localhost:5001/api/courses/bookings/${bookingId}`,
+        `https://jituwebsite.up.railway.app/api/courses/bookings/${bookingId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -250,7 +250,7 @@ const AdminDashboard = () => {
     );
     if (confirmation) {
       try {
-        await axios.delete(`http://localhost:5001/api/courses/${courseId}`, {
+        await axios.delete(`https://jituwebsite.up.railway.app/api/courses/${courseId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
