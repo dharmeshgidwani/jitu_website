@@ -12,16 +12,13 @@ const User = require("../models/User");
 
 const router = express.Router();
 
-// ✅ Use memory storage for image uploads
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// ✅ Generate JWT for courses
 const generateCourseToken = (courseId) => {
   return jwt.sign({ courseId }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
-// 🔹 GET Courses (Show all if not logged in, filter by examMonth if logged in)
 router.get("/", authMiddleware, async (req, res) => {
   try {
     let courses;
