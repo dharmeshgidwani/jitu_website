@@ -31,7 +31,7 @@ router.post("/signup", async (req, res) => {
       password: hashedPassword,
       otp,
       otpExpires: Date.now() + 5 * 60 * 1000, // 5 mins expiry
-      examMonth: examMonth ? examMonth : null,
+      examMonth: examMonth || undefined,
     };
 
     // Send OTP to email
