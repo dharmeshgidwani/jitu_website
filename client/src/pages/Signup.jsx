@@ -25,36 +25,31 @@ const Signup = () => {
   // ✅ Signup function with validation
   const handleSignup = async () => {
     if (isLoading) return; // Prevent multiple clicks
-
+  
     const { name, email, phone, password, examMonth } = form;
-
-    if (
-      !name.trim() ||
-      !email.trim() ||
-      !phone.trim() ||
-      !password.trim() ||
-      !examMonth.trim()
-    ) {
-      toast.error("⚠️ Please fill in all fields before signing up.", {
+  
+    // ✅ Allow examMonth to be empty
+    if (!name.trim() || !email.trim() || !phone.trim() || !password.trim()) {
+      toast.error("⚠️ Please fill in all required fields before signing up.", {
         position: "top-center",
         autoClose: 3000,
       });
       return;
     }
-
+  
     setIsLoading(true); // Show loading state
-
+  
     try {
-      await axios.post(
-        "https://jituwebsite.up.railway.app/api/auth/signup",
-        form
-      );
-
+      await axios.post("https://jituwebsite.up.railway.app/api/auth/signup", {
+        ...form,
+        examMonth: examMonth.trim() ? examMonth : null, // ✅ Send null if empty
+      });
+  
       toast.success("✅ OTP sent to your email. Please enter OTP to verify.", {
         position: "top-center",
         autoClose: 3000,
       });
-
+  
       setShowOtpModal(true);
     } catch (error) {
       toast.error(error.response?.data?.message || "Signup failed", {
@@ -65,6 +60,7 @@ const Signup = () => {
       setIsLoading(false); // Reset loading state after request
     }
   };
+  
 
   // ✅ Verify OTP function
   const handleVerifyOTP = async () => {
