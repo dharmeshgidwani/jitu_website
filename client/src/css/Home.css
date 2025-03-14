@@ -39,18 +39,17 @@ body {
 
 /* Typing Effect */
 .typing-effect {
-  font-size: clamp(1.5rem, 5vw, 3rem);
+  font-size: clamp(1.5rem, 5vw, 3rem); /* Adjusts dynamically */
   font-weight: bold;
   margin-bottom: 1rem;
   text-transform: uppercase;
   letter-spacing: 1.5px;
+  white-space: nowrap; /* Keep text in one line */
   overflow: hidden;
   border-right: 4px solid white;
-  display: inline-block;
-  white-space: nowrap;
-  width: 0;
-  max-width: 100%; /* Ensure it doesn't overflow */
-  animation: typing 3.5s steps(30, end) forwards, blink 0.7s infinite;
+  width: fit-content;
+  margin: auto;
+  animation: typing 3.5s steps(30, end) infinite alternate, blink 0.7s infinite;
 }
 
 /* Typing Animation */
@@ -62,16 +61,6 @@ body {
     width: 100%; /* Expand within container */
   }
 }
-
-/* Cursor Blinking */
-@keyframes blink {
-  50% {
-    border-color: transparent;
-  }
-}
-
-
-
 
 /* Cursor Blinking */
 @keyframes blink {
@@ -277,6 +266,14 @@ body {
 }
 
 @media (max-width: 576px) {
+  .typing-effect {
+    font-size: clamp(1.2rem, 6vw, 2rem); /* Make font smaller on small screens */
+    max-width: 100%;
+    white-space: normal; /* Allow wrapping if needed */
+    text-align: center;
+    display: block;
+    border-right: none; /* Remove cursor effect on small screens */
+  }
   .hero-section {
     padding: 7vw 5%;
   }
