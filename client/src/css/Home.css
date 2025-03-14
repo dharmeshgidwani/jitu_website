@@ -45,23 +45,24 @@ body {
   margin-bottom: 1rem;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  white-space: nowrap;
   overflow: hidden;
   border-right: 4px solid white;
   display: inline-block;
-  max-width: 100%;
-  animation: typing 3.5s steps(30, end) infinite alternate, blink 0.7s infinite;
+  white-space: nowrap; /* Ensure the text stays in one line */
+  width: 0; /* Start with no width */
+  animation: typing 3.5s steps(30, end) forwards, blink 0.7s infinite;
 }
 
 /* Typing Animation */
 @keyframes typing {
   from {
-    max-width: 0;
+    width: 0;
   }
   to {
-    max-width: 100%;
+    width: fit-content; /* Expand to fit the text exactly */
   }
 }
+
 
 
 /* Cursor Blinking */
